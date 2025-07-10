@@ -1,19 +1,22 @@
-// server.js
 import express from 'express';
 import cors from 'cors';
 import { MongoClient } from 'mongodb';
 
 const app = express();
 app.use(cors());
-app.use(express.json());           // per eventuali POST in futuro
+app.use(express.json());
 
-// 👉 Variabili ambiente
-const MONGO_URI = process.env.MONGO_URI;           // la metterai su Render
-const PORT      = process.env.PORT || 10000;       // Render fornisce PORT
+const MONGO_URI = process.env.MONGO_URI;
+console.log('MONGO_URI:', MONGO_URI);
 
-// 👉 Connessione a MongoDB Atlas
+if (!MONGO_URI) {
+  throw new Error('Errore: MONGO_URI non definito! Controlla le variabili ambiente su Render');
+}
+
+const PORT = process.env.PORT || 10000;
+
 const client = new MongoClient(MONGO_URI);
-let db; // la useremo dopo il connect
+let db;
 
 app.get('/prodotti', async (req, res) => {
   try {
@@ -24,11 +27,10 @@ app.get('/prodotti', async (req, res) => {
   }
 });
 
-// 🏁 Avvio server
 app.listen(PORT, async () => {
   try {
     await client.connect();
-    db = client.db('test');      // cambia con il tuo nome DB se vuoi
+    db = client.db('studio-giaquinta');
     console.log(`API pronta su http://localhost:${PORT}`);
   } catch (err) {
     console.error('Errore connessione MongoDB:', err);
