@@ -1,0 +1,5 @@
+# Non committare dipendenze locali
+node_modules/
+
+# Non committare variabili segrete locali
+.env
