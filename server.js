@@ -18,6 +18,10 @@ const PORT = process.env.PORT || 10000;
 const client = new MongoClient(MONGO_URI);
 let db;
 
+app.get('/', (req, res) => {
+  res.send('Benvenuto alla API di mongo-backend!');
+});
+
 app.get('/prodotti', async (req, res) => {
   try {
     const prodotti = await db.collection('prodotti').find().toArray();
